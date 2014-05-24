@@ -1,0 +1,25 @@
+
+	function animate(frames, delay) {
+		(frames.shift())();
+		if(frames.length > 0) {
+			setTimeout(function() {
+				animate(frames, delay);
+			}, delay);
+		}
+	}
+
+	function run() {
+		console.group();
+		animate([
+			console.log.bind(console, "10%"),
+			console.log.bind(console, "32%"),
+			console.log.bind(console, "65%"),
+			console.log.bind(console, "86%"),
+			console.log.bind(console, "100%"),
+			console.log.bind(console, "."),
+			console.log.bind(console, ".."),
+			console.log.bind(console, "..."),
+			console.log.bind(console, "activated."),
+			console.groupEnd.bind(console)
+		], 333);
+	}
