@@ -8,15 +8,23 @@
 // will need to listen on multiple ports:
 //  port at: ui
 //  port lots: peer conxn
-define('obelisk', ['planet', 'peer'], function(planet, peerjs) {
-	var corpus = ['courier', 'messenger', 'carrier', 'crier', 'postmaster', 'notetaker', 'deliverer', 'budare'];
-	var obelisk;
+define('obelisk', ['planet'], function(planet) {
+	var corpus = ['courier', 'messenger', 'carrier', 'postmaster', 'notetaker', 'deliverer', 'budare'];
 
-	function init() {
-		obelisk = new planet.Planet(corpus);
-	}
+	var Obelisk = function() {
+		this.planet = new planet.Planet(corpus);
+		//this.peerGraph = d3.newGraph('forceDirected');
+		//this.planet.on('orbit', function() {
+			//this.peerGraph.addNode();
+		//});
+
+	};
+
+	Obelisk.prototype.broadcast = function(msg) {
+		this.planet.broadcast(msg);
+	};
 
 	return {
-		'init': init
+		'Obelisk': Obelisk
 	};
 });

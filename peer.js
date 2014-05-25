@@ -1,6 +1,5 @@
 /*! peerjs.js build:0.3.8, development. Copyright(c) 2013 Michelle Bu <michelle@michellebu.com> */
-define('peer', [], function(){
-var exports = {};
+(function(exports){
 var binaryFeatures = {};
 binaryFeatures.useBlobBuilder = (function(){
   try {
@@ -59,7 +58,7 @@ BufferBuilder.prototype.getBuffer = function() {
     return new Blob(this._parts);
   }
 };
-var BinaryPack = exports.BinaryPack = {
+exports.BinaryPack = {
   unpack: function(data){
     var unpacker = new Unpacker(data);
     return unpacker.unpack();
@@ -1550,7 +1549,7 @@ Peer.prototype._handleMessage = function(message) {
       break;
 
     case 'EXPIRE': // The offer sent to a peer has expired without response.
-      this.emit('error', new Error('Could not connect to peer ' + peer));
+      this._fail('connect-error', new Error('Could not connect to peer ' + peer));
       break;
     case 'OFFER': // we should consider switching this to CALL/CONNECT, but this is the least breaking option.
       var connectionId = payload.connectionId;
@@ -1641,7 +1640,7 @@ Peer.prototype.connect = function(peer, options) {
     util.warn('You cannot connect to a new Peer because you called '
         + '.disconnect() on this Peer and ended your connection with the'
         + ' server. You can create a new Peer to reconnect.');
-    this.emit('error', new Error('Cannot connect to new Peer after disconnecting from server.'));
+    this._fail('server-disconnected', new Error('Cannot connect to new Peer after disconnecting from server.'));
     return;
   }
   var connection = new DataConnection(peer, this, options);
@@ -1658,7 +1657,7 @@ Peer.prototype.call = function(peer, stream, options) {
     util.warn('You cannot connect to a new Peer because you called '
         + '.disconnect() on this Peer and ended your connection with the'
         + ' server. You can create a new Peer to reconnect.');
-    this.emit('error', new Error('Cannot connect to new Peer after disconnecting from server.'));
+    this._fail('server-disconnected', new Error('Cannot connect to new Peer after disconnecting from server.'));
     return;
   }
   if (!stream) {
@@ -1707,6 +1706,14 @@ Peer.prototype._abort = function(type, message) {
   var err = new Error(message);
   err.type = type;
   this.destroy();
+  this.emit('error', err);
+};
+
+/** Emits an error message without destruction. */
+Peer.prototype._fail = function(type, message) {
+  util.error('Failed. Error:', message);
+  var err = new Error(message);
+  err.type = type;
   this.emit('error', err);
 };
 
@@ -2655,5 +2662,4 @@ Socket.prototype.close = function() {
   }
 }
 
-return exports;
-});
+})(this);
