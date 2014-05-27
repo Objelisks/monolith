@@ -3,12 +3,14 @@
 </head>
 <body>
 <div>monolith</div>
+<link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" src="peer.js"></script>
 <script type="text/javascript" src="curl.js"></script>
 <script>
-	curl(['obelisk', 'domReady!'], function(obelisk) {
+	curl(['obelisk', 'd3', 'domReady!'], function(obelisk, d3) {
 		var messenger = new obelisk.Obelisk();
 		window.messenger = messenger;
+		window.d3 = d3;
 	},
 	function(error) {
 		console.log("failed to load files. mission abort. " + error);
