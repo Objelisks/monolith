@@ -1,7 +1,41 @@
+#things {
+	display: flex;
+	flex-flow: row;
+	flex-direction: row;
+}
+
+#things > * {
+	border: 1px solid black;
+	border-radius: 5pt;
+	padding: 2px;
+}
+
+#messageArea {
+	flex: auto;
+	max-width: 500px;
+}
+
+#graph {
+	flex: 0 0 500px;
+	max-height: 300px;
+	min-height: 200px;
+	max-width: 500px;
+}
+
 .node {
-	fill: #66c;
+	fill: #fff;
+	stroke: #000;
+	stroke-width: 5px;
 }
 
 .link {
-	stroke: #ccc;
+	stroke: #000;
+	stroke-width: 5px;
+}
+
+@media all and (max-width: 800px) {
+	#things {
+		flex-flow: column;
+		flex-direction: column;
+	}
 }

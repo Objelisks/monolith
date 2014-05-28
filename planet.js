@@ -111,6 +111,8 @@ define('planet', ['EventEmitter'], function(EventEmitter) {
 					self.log('connected main to alpha');
 					self.alphaReady = true;
 					self.broadcast('hello from ' + self.name);
+
+					// TODO emit deorbit events as well
 					self.emit('orbit', 'alpha');
 				});
 				self.listen.on('data', function(data) {
