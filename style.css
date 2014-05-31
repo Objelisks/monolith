@@ -1,3 +1,7 @@
+body {
+	font: 16px Helvetica;
+}
+
 #things {
 	display: flex;
 	flex-flow: row;
@@ -7,7 +11,7 @@
 #things > * {
 	border: 1px solid black;
 	border-radius: 5pt;
-	padding: 2px;
+	margin: 5px;
 }
 
 #messageArea {
@@ -16,10 +20,9 @@
 }
 
 #graph {
-	flex: 0 0 500px;
-	max-height: 300px;
-	min-height: 200px;
-	max-width: 500px;
+	flex: 0 0 auto;
+	height: 300px;
+	width: 500px;
 }
 
 .node {

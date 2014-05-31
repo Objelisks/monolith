@@ -19,7 +19,7 @@ define('obelisk', ['planet', 'd3'], function(Planet, d3) {
 		this.graphLinks = svg.selectAll('.link');
 
 		this.peerGraph = d3.layout.force()
-			.size([500, 200])
+			.size([500, 300])
 			.linkDistance(50)
     		.gravity(.05)
 			.charge(-60)
@@ -28,7 +28,7 @@ define('obelisk', ['planet', 'd3'], function(Planet, d3) {
 		this.nodesMap = {};
 
 		this.planet.on('msg', handleMessage.bind(this));
-		document.getElementById('messager').addEventListener('submit', messageSubmit.bind(this));
+		d3.select('#messager').on('submit', messageSubmit.bind(this));
 	};
 
 	var tick = function() {
@@ -85,8 +85,8 @@ define('obelisk', ['planet', 'd3'], function(Planet, d3) {
 		self.peerGraph.start();
 	};
 
-	var messageSubmit = function(e) {
-		e.preventDefault();
+	var messageSubmit = function() {
+		d3.event.preventDefault();
 		var msgBox = d3.select('#messageBox');
 		var messageContent = msgBox.property('value');
 		this.broadcast(messageContent);
