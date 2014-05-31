@@ -1,0 +1,13 @@
+.week {
+  display: flex;
+}
+
+.day {
+  flex: 1 1 auto;
+  height: 100px;
+  transition: background-color 300ms;
+}
+
+.day:hover {
+  background-color: steelblue;
+}

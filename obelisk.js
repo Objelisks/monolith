@@ -14,14 +14,14 @@ define('obelisk', ['planet', 'd3'], function(Planet, d3) {
 	var Obelisk = function() {
 		var self = this;
 		this.planet = new Planet(corpus);
-		var svg = d3.select('#graph')
+		var svg = d3.select('#graph');
 		this.graphNodes = svg.selectAll('.node');
 		this.graphLinks = svg.selectAll('.link');
 
 		this.peerGraph = d3.layout.force()
 			.size([500, 300])
 			.linkDistance(50)
-    		.gravity(.05)
+      .gravity(0.05)
 			.charge(-60)
 			.on('tick', tick.bind(this))
 			.start();
@@ -97,7 +97,5 @@ define('obelisk', ['planet', 'd3'], function(Planet, d3) {
 		this.planet.broadcast(msg);
 	};
 
-	return {
-		'Obelisk': Obelisk
-	};
+	return Obelisk;
 });
