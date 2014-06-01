@@ -18,11 +18,14 @@ Things:
 
 */
 define('pyramid', ['planet', 'd3'], function(Planet, d3) {
+  var selected = null;
+  var lastSelected = null;
+  
   var Pyramid = function() {
     var self = this;
     self.scrollDistance = 0;
     self.scrollDate = new Date();
-    updateCalendar(self.scrollDate);
+    updateCalendar(self.scrollDate, 0);
     d3.select('body').on('wheel', function() {
       d3.event.preventDefault();
       var amount = d3.event.deltaY;
@@ -30,12 +33,12 @@ define('pyramid', ['planet', 'd3'], function(Planet, d3) {
       if(Math.abs(self.scrollDistance) > 50.0) {
         self.scrollDate = d3.time.week.offset(self.scrollDate, Math.sign(self.scrollDistance));
         self.scrollDistance = 0;
-        updateCalendar(self.scrollDate);
+        updateCalendar(self.scrollDate, Math.sign(amount));
       }
     });
   };
   
-  var updateCalendar = function(startTime) {
+  var updateCalendar = function(startTime, direction) {
     var startDate = d3.time.week.floor(startTime);
     var formatter = d3.time.format('%B %e');
     var headerFormatter = d3.time.format('%A');
@@ -49,23 +52,47 @@ define('pyramid', ['planet', 'd3'], function(Planet, d3) {
     var weeks = d3.select('#time').selectAll('.week')
       .data(d3.time.weeks(startDate, d3.time.month.offset(startDate, 1)));
     weeks.enter().append('div')
-      .attr('class', 'week');
-    weeks.exit().remove();
-    d3.select('#time').selectAll('.week')
+      .classed('week', true)
       .style('position', 'relative')
-      .style('top', '100px')
+      .style('opacity', 0);
+    weeks.exit()/*
+      .style('display', 'none')
+      .style('width', function() { return this.clientWidth; })
+      .style('height', '0px')
+      .style('top', function() { return (this.clientHeight*direction)+'px'; })
+      .transition().duration(200)
+      .style('opacity', 0)
+      .style('top', '0px')*/
+      .remove();
+    weeks
+      .style('top', function() { return (this.clientHeight*direction)+'px'; })
+      /*.style('opacity', function(d, i) {
+        if(direction < 0)
+          return i === 0 ? 0.0 : 1.0;
+        else
+          return i === weeks.size()-1 ? 0.0 : 1.0;
+        })*/
       .interrupt()
       .transition()
-      .duration(100)
+      .duration(200)
+      .ease('linear-in-out')
+      .style('opacity', 1)
       .style('top', '0px');
     
     var days = weeks.selectAll('.day').data(function(d) {
         return d3.time.days(d, d3.time.week.offset(d, 1));
-      }, function(d) { return d.toString(); });
+      });
     days.enter().append('div')
-      .attr('class', 'day');
-    days.exit().remove();
-    days.text(function(d) { return formatter(d); });
+      .classed('day', true);
+    days.exit();
+    days
+      .text(function(d) { return formatter(d); })
+      .on('click', function(d) {
+        d3.select('.selected').classed('selected', false);
+        selected = d;
+        d3.event.target.classList.add('selected');
+      })
+      .classed('selected', function(d) { if(!selected) return false; return d.getTime() == selected.getTime(); });
     
   };
   

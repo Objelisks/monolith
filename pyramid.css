@@ -6,22 +6,39 @@
   flex: 1 1 60%;
 }
 
+#time {
+  display: flex;
+  flex-direction: column;
+}
+
 #events {
   flex: 1 1 40%;
 }
 
+.header_week {
+  display: flex;
+  min-height: 10%;
+}
+
 .week {
   display: flex;
+  min-height: 12%;
 }
 
 .header_day {
   flex: 1 1 14.58%;
-  height: 50px;
 }
 
 .day {
   flex: 1 1 14.58%;
-  height: 100px;
+}
+
+.selected {
+  background-color: red !important;
+}
+
+.selected:hover {
+  background-color: purple !important;
 }
 
 .day:hover {
