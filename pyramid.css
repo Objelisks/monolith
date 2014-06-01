@@ -1,11 +1,27 @@
+#things {
+  display: flex;
+}
+
+#calendar {
+  flex: 1 1 60%;
+}
+
+#events {
+  flex: 1 1 40%;
+}
+
 .week {
   display: flex;
 }
 
+.header_day {
+  flex: 1 1 14.58%;
+  height: 50px;
+}
+
 .day {
-  flex: 1 1 auto;
+  flex: 1 1 14.58%;
   height: 100px;
-  transition: background-color 300ms;
 }
 
 .day:hover {
